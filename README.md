@@ -1,4 +1,4 @@
-# Gasnow 2
+# GasNow 2
 
 Clone of gasnow.org
 
@@ -17,8 +17,8 @@ yarn start
 The app needs the following env variables
 
 ```.env
-REACT_APP_API_URL =  http://localhost:5000
-REACT_APP_WS_URL = ws://localhost:5000/ws
+REACT_APP_API_URL=http://localhost:5000
+REACT_APP_WS_URL=ws://localhost:5000/ws
 ```
 
 ## Build with Docker
