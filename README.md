@@ -25,7 +25,7 @@ REACT_APP_WS_URL=ws://localhost:5000/ws
 
 ```bash
 # build
-docker build -t gasnow2-ui .
+docker build --env-file=.env -t gasnow2-ui .
 # run
-docker run -p3000:3000 --env-file=.env --name gasnow2-ui gasnow2-ui
+docker run -p3000:3000 --name gasnow2-ui gasnow2-ui
 ```
