@@ -5,25 +5,34 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { config, useSpring } from "react-spring";
 import { useToggle } from "react-use";
 import GasPrice from "../components/GasPrice";
-import { updateGasPrice } from "../reducers";
+import { updateGasPrice, updateCurrencyPrice } from "../reducers";
+import { getEstimatedPriceFmt, TYPE_TO_GAS } from "../utils/price";
 import { setupWS } from "../websocket";
 
 function Main() {
   const dispatch = useDispatch();
 
   useOnce(() => {
-    setupWS((gasPrice) => dispatch(updateGasPrice(gasPrice)));
+    setupWS(
+      (gasPrice) => dispatch(updateGasPrice(gasPrice)),
+      (currencyPrice) => dispatch(updateCurrencyPrice(currencyPrice))
+    );
   });
 
   const [on, toggle] = useToggle(true);
 
   // @ts-ignore
   const gasPrice = useSelector((state) => state.gasPrice, shallowEqual);
+  // @ts-ignore
+  const { usd } = useSelector((state) => state.currencyPrice, shallowEqual);
   useEffect(() => {
     document.title = `${gasPrice?.gasPrices?.fast} Gwei | GasNow2`;
     toggle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gasPrice?.gasPrices?.fast]);
+
+  const rapidUsedPrice = getEstimatedPriceFmt(TYPE_TO_GAS.ETH, gasPrice?.gasPrices?.rapid, usd);
+  const fastUsedPrice = getEstimatedPriceFmt(TYPE_TO_GAS.ETH, gasPrice?.gasPrices?.fast, usd);
 
   const fillStyle = useSpring({
     reset: true,
@@ -51,7 +60,7 @@ function Main() {
             resetAnim={on}
             priceInGwei={gasPrice?.gasPrices?.rapid}
             title="Rapid"
-            subtitle="$9.00 | 15 Seconds"
+            subtitle={`${rapidUsedPrice} | 15 Seconds`}
             style={fillStyle}
           />
         </Grid>
@@ -68,7 +77,7 @@ function Main() {
             resetAnim={on}
             priceInGwei={gasPrice?.gasPrices?.fast}
             title="Fast"
-            subtitle="$9.00 | 1 Minute"
+            subtitle={`${fastUsedPrice} | 1 Minute`}
             style={fillStyle}
           />
         </Grid>

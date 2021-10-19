@@ -5,6 +5,7 @@ import { combineReducers } from "redux";
 // ********************************
 
 const UPDATE_GAS_PRICE = "UPDATE_GAS_PRICE";
+const UPDATE_CURRENCY_PRICE = "UPDATE_CURRENCY_PRICE";
 
 // ********************************
 // Action creators
@@ -13,6 +14,11 @@ const UPDATE_GAS_PRICE = "UPDATE_GAS_PRICE";
 const updateGasPrice = (gasPrice) => ({
   type: UPDATE_GAS_PRICE,
   payload: gasPrice,
+});
+
+const updateCurrencyPrice = (currencyPrice) => ({
+  type: UPDATE_CURRENCY_PRICE,
+  payload: currencyPrice,
 });
 
 // ********************************
@@ -28,8 +34,18 @@ const gasPriceReducer = (gasPrice = {}, action) => {
   }
 };
 
+const currencyPriceReducer = (currencyPrice = {}, action) => {
+  switch (action.type) {
+    case UPDATE_CURRENCY_PRICE:
+      return action.payload.data;
+    default:
+      return currencyPrice;
+  }
+};
+
 const reducers = combineReducers({
   gasPrice: gasPriceReducer,
+  currencyPrice: currencyPriceReducer,
 });
 
-export { reducers, updateGasPrice };
+export { reducers, updateGasPrice, updateCurrencyPrice };
