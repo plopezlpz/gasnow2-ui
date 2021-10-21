@@ -5,7 +5,6 @@ export const connectWS = (onGasPrice, onCurrencyPrice) => {
 
   ws.onmessage = (evt) => {
     const data = JSON.parse(evt.data);
-    console.log(evt);
     switch (data?.type) {
       case "gasprice":
         onGasPrice(JSON.parse(evt.data));

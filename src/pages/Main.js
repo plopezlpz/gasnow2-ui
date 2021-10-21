@@ -1,12 +1,14 @@
 import { Grid, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import { useOnce } from "@react-spring/shared";
 import React, { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { config, useSpring } from "react-spring";
 import { useToggle } from "react-use";
+import EstimatedCost from "../components/EstimatedCost";
 import GasPrice from "../components/GasPrice";
 import { updateGasPrice, updateCurrencyPrice } from "../reducers";
-import { getEstimatedPriceFmt, TYPE_TO_GAS } from "../utils/price";
+import { getEstimatedPriceFmt } from "../utils/price";
 import { connectWS } from "../websocket";
 
 function Main() {
@@ -33,8 +35,8 @@ function Main() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gasPrice?.gasPrices?.fast]);
 
-  const rapidUsedPrice = getEstimatedPriceFmt(TYPE_TO_GAS.ETH, gasPrice?.gasPrices?.rapid, usd);
-  const fastUsedPrice = getEstimatedPriceFmt(TYPE_TO_GAS.ETH, gasPrice?.gasPrices?.fast, usd);
+  const rapidUsedPrice = getEstimatedPriceFmt(gasPrice?.gasPrices?.rapid, usd);
+  const fastUsedPrice = getEstimatedPriceFmt(gasPrice?.gasPrices?.fast, usd);
 
   const fillStyle = useSpring({
     reset: true,
@@ -45,7 +47,7 @@ function Main() {
 
   return (
     <>
-      <Typography variant="h3" textAlign="center" mb={3}>
+      <Typography variant="h3" textAlign="center" gutterBottom={true}>
         Gas Prices (Gwei)
       </Typography>
       <Grid container spacing={3} justifyContent="center" alignItems="center">
@@ -84,6 +86,11 @@ function Main() {
           />
         </Grid>
       </Grid>
+      <Box sx={{ m: "2rem" }} />
+      <Typography variant="h5" textAlign="center" gutterBottom={true}>
+        Estimated Cost of Transactions
+      </Typography>
+      <EstimatedCost gweiPrice={gasPrice?.gasPrices?.fast} ethPrice={usd} />
     </>
   );
 }
