@@ -13,7 +13,7 @@ yarn install
 yarn start
 ```
 
-## env variables
+## env variables
 The app needs the following env variables
 
 ```.env
